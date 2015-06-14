@@ -3,7 +3,7 @@ from visual import *
 
 
 ##  length units are to be in feet for ease of use in the USA ('Merica!)
-
+light_rad=0.75
 
 ##  set camera so that we are looking down onto streets
 scene.forward = vector(0,-1,0)
@@ -26,13 +26,13 @@ west_text = text(text="West (+x)", pos = west_vec.pos+west_vec.axis+vector(0,0,-
 
 ##  create a stoplight class that has member functions to change the color, change the position, etc.
 class Stoplight():
-    def __init__(self):
-        self.base = frame(pos=vector(0,10,0))
+    def __init__(self, position):
+        self.base = frame(pos=position)
         #   NOTE:::  All positions of objects witihin the frame are RELATIVE to the frame's position, not the world position
-        case=box(frame=self.base,pos=vector(0,0,0), length=1, width=0.25,height=2, color=color.white)
-        self.yellow=sphere(frame=self.base,pos=vector(case.pos.x, case.pos.y, case.pos.z+(case.width/2)), radius=0.25, color=color.yellow)
-        self.green=sphere(frame=self.base,pos=vector(case.pos.x, case.pos.y-(2*self.yellow.radius+0.17), case.pos.z+(case.width/2)), radius=0.25, color=color.green)
-        self.red=sphere(frame=self.base,pos=vector(case.pos.x, case.pos.y+(2*self.yellow.radius+0.17), case.pos.z+(case.width/2)), radius=0.25, color=color.red)
+        case=box(frame=self.base,pos=vector(0,0,0), length=2, width=2,height=2, color=color.white)
+        self.yellow=sphere(frame=self.base,pos=case.pos+vector(0,case.height/2,0), radius=light_rad, color=color.yellow)
+        self.green=sphere(frame=self.base,pos=case.pos+vector(0,case.height/2,0), radius=light_rad, color=color.green)
+        self.red=sphere(frame=self.base,pos=case.pos+vector(0,case.height/2,0), radius=light_rad, color=color.red)
 
     def move(self, new_position):
         self.base.pos=new_position
@@ -93,21 +93,35 @@ class Car():
         
 
 
-new_light = Stoplight()
+
+########################################################################
+########################################################################
+new_light = Stoplight(vector(0,10,0))
 new_road = Road(int(5280/25), directions['north'])
+
 key=scene.kb.getkey()
-#big.axis=vector(0,1,0)
+
 new_light.move(vector(10,10,0))
 new_road.change_dir(vector(1,0,0))
+
 key=scene.kb.getkey()
+
 new_road.move(10*directions['north'])
+
 key=scene.kb.getkey()
+
 new_light.green_light()
+
 key=scene.kb.getkey()
+
 new_light.yellow_light()
+
 key=scene.kb.getkey()
+
 new_light.red_light()
+
 key=scene.kb.getkey()
+
 newer_road = Road(int(5280/25), directions['north'])
 
 new_car = Car(vector(6,0,100), directions['north'])
